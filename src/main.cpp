@@ -9,7 +9,7 @@ struct Circle {
 #define WIDTH  800
 #define HEIGHT 600
 
-#define BALL_SPEED 5
+#define ball_speed 5
 
 int main(int argc, char** argv) {
   InitWindow(WIDTH, HEIGHT, "PPGame");
@@ -35,18 +35,30 @@ int main(int argc, char** argv) {
 
     // Update
     {
-      if(IsKeyPressed(KEY_W)) {
-        ball.pos.y -= BALL_SPEED;
-      }
-      if(IsKeyPressed(KEY_S)) {
-        ball.pos.y += BALL_SPEED;
-      }
-      if(IsKeyPressed(KEY_A)) {
-        ball.pos.x -= BALL_SPEED;
-      }
-      if(IsKeyPressed(KEY_D)) {
-        ball.pos.x += BALL_SPEED;
-      }
+      if(IsKeyPressedRepeat(KEY_W))
+    {
+      ball.pos.y -= ball_speed * 2.0;
+      if(ball.pos.y < 0)
+        ball.pos.y = 0.0f;
+    }
+    if(IsKeyPressedRepeat(KEY_S))
+    {
+      ball.pos.y += ball_speed * 2.0;
+      if(ball.pos.y > HEIGHT)
+        ball.pos.y = (float) HEIGHT;
+    }
+    if(IsKeyPressedRepeat(KEY_A))
+    {
+      ball.pos.x -= ball_speed * 2.0;
+      if(ball.pos.x < 0)
+        ball.pos.x = 0.0f;
+    }
+    if(IsKeyPressedRepeat(KEY_D))
+    {
+      ball.pos.x += ball_speed * 2.0;
+      if(ball.pos.y > WIDTH)
+        ball.pos.y = (float) WIDTH;
+    }
     }
   }
 
