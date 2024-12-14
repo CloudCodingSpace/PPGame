@@ -1,0 +1,6 @@
+[submodule "raylib"]
+	path = raylib
+	url = https://github.com/raysan5/raylib
+[submodule "slog"]
+	path = slog
+	url = https://github.com/CloudCodingSpace/slog
