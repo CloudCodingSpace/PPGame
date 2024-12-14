@@ -15,7 +15,7 @@ struct Bar {
 #define WIDTH  800
 #define HEIGHT 600
 
-#define BALL_SPEED 5
+#define ball_speed 5
 
 int main(int argc, char** argv) {
   InitWindow(WIDTH, HEIGHT, "PPGame");
@@ -37,7 +37,7 @@ int main(int argc, char** argv) {
   computerBar.color = { 223, 234, 23, 255 };
 
   SetTargetFPS(60);
-  while (!WindowShouldClose())
+  while(!WindowShouldClose())
   {
     BeginDrawing();
     ClearBackground(green);
@@ -50,11 +50,11 @@ int main(int argc, char** argv) {
     } 
 
     EndDrawing();
+  }
 
-    // Update
-    {
-      
-    }
+  // Update
+  {
+     
   }
 
   CloseWindow();
