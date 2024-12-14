@@ -17,7 +17,6 @@ set(SLOG_BUILD_TEST FALSE CACHE BOOL "" FORCE)
 file(GLOB_RECURSE SRCS CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
 
 add_subdirectory(raylib)
-add_subdirectory(slog)
 
 add_executable(${PROJECT_NAME} ${SRCS})
-target_link_libraries(${PROJECT_NAME} PRIVATE raylib slog)
+target_link_libraries(${PROJECT_NAME} PRIVATE raylib)
