@@ -12,10 +12,22 @@ struct Bar {
   Color color;
 };
 
+struct CollisionDetails {
+  bool player_collision;
+  bool computer_collision;
+  bool line_collision;
+};
+
 #define WIDTH  800
 #define HEIGHT 600
 
 #define ball_speed 5
+
+bool first_move = true;
+bool game_resumed = false;
+
+Rectangle ConvertBarToRectangle(Bar& bar);
+CollisionDetails CheckCollision(Circle circle, Bar player_bar, Bar computer_bar);
 
 int main(int argc, char** argv) {
   InitWindow(WIDTH, HEIGHT, "PPGame");
@@ -50,14 +62,47 @@ int main(int argc, char** argv) {
     } 
 
     EndDrawing();
-  }
 
-  // Update
-  {
-     
+    // Update
+    {
+      if(IsKeyPressed(KEY_SPACE))
+      {
+        game_resumed = true;
+      }
+      if(game_resumed)
+      {
+        if(first_move)
+        {
+          ball.pos.x -= ball_speed * 2.0f;
+          CheckCollision(ball, playerBar, computerBar);
+
+          first_move = false;
+        }
+      }
+    }
   }
 
   CloseWindow();
 
   return 0;
+}
+
+Rectangle ConvertBarToRectangle(Bar& bar)
+{
+  Rectangle rect;
+  rect.x = bar.pos.x;
+  rect.y = bar.pos.y;
+  rect.width = bar.size.x;
+  rect.height = bar.size.y;
+
+  return rect;
+}
+
+CollisionDetails CheckCollision(Circle circle, Bar player_bar, Bar computer_bar)
+{
+  Rectangle playerRect = ConvertBarToRectangle(player_bar);
+  Rectangle computerRect = ConvertBarToRectangle(computer_bar);
+  bool collsion_with_player = CheckCollisionCircleRec(circle.pos, circle.radius, playerRect);
+  bool collision_with_computer = CheckCollisionCircleRec(circle.pos, circle.radius, computerRect);
+
 }
