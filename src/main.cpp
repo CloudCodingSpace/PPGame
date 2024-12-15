@@ -12,29 +12,29 @@ struct Bar {
   Color color;
 };
 
-struct CollisionDetails {
-  bool player_collision;
-  bool computer_collision;
-  bool line_collision;
-};
-
 #define WIDTH  800
 #define HEIGHT 600
 
-#define ball_speed 5
+static int ballVelocity = 8;
+static bool isGameRunning = false;
 
-bool first_move = true;
-bool game_resumed = false;
+Rectangle ConvertBarToRectangle(const Bar& bar)
+{
+  Rectangle rect;
+  rect.x = bar.pos.x;
+  rect.y = bar.pos.y;
+  rect.width = bar.size.x;
+  rect.height = bar.size.y;
 
-Rectangle ConvertBarToRectangle(Bar& bar);
-CollisionDetails CheckCollision(Circle circle, Bar player_bar, Bar computer_bar);
+  return rect;
+}
 
 int main(int argc, char** argv) {
   InitWindow(WIDTH, HEIGHT, "PPGame");
 
   Color green = {47, 109, 189, 255};
   Circle ball{};
-  ball.radius = 30;
+  ball.radius = 20;
   ball.pos = (Vector2) { (int)(WIDTH/2), (int)(HEIGHT/2) };
   ball.color = { 255, 0, 0, 255 };
 
@@ -65,19 +65,28 @@ int main(int argc, char** argv) {
 
     // Update
     {
-      if(IsKeyPressed(KEY_SPACE))
-      {
-        game_resumed = true;
+      // Game running state update
+      if(IsKeyPressed(KEY_SPACE)) {
+        isGameRunning = !isGameRunning;
       }
-      if(game_resumed)
-      {
-        if(first_move)
-        {
-          ball.pos.x -= ball_speed * 2.0f;
-          CheckCollision(ball, playerBar, computerBar);
 
-          first_move = false;
-        }
+      // Ball pos update
+      if(isGameRunning) {
+        ball.pos.x -= ballVelocity;
+      }
+      // Collision check with the bars
+      if(CheckCollisionCircleRec(ball.pos, ball.radius, ConvertBarToRectangle(computerBar))) {
+        ballVelocity *= -1;
+      } else if(CheckCollisionCircleRec(ball.pos, ball.radius, ConvertBarToRectangle(playerBar))) {
+        ballVelocity *= -1;
+      }
+
+      // Playerbar control
+      if(IsKeyDown(KEY_UP)) {
+        playerBar.pos.y -= 5;
+      }
+      if(IsKeyDown(KEY_DOWN)) {
+        playerBar.pos.y += 5;
       }
     }
   }
@@ -85,24 +94,4 @@ int main(int argc, char** argv) {
   CloseWindow();
 
   return 0;
-}
-
-Rectangle ConvertBarToRectangle(Bar& bar)
-{
-  Rectangle rect;
-  rect.x = bar.pos.x;
-  rect.y = bar.pos.y;
-  rect.width = bar.size.x;
-  rect.height = bar.size.y;
-
-  return rect;
-}
-
-CollisionDetails CheckCollision(Circle circle, Bar player_bar, Bar computer_bar)
-{
-  Rectangle playerRect = ConvertBarToRectangle(player_bar);
-  Rectangle computerRect = ConvertBarToRectangle(computer_bar);
-  bool collsion_with_player = CheckCollisionCircleRec(circle.pos, circle.radius, playerRect);
-  bool collision_with_computer = CheckCollisionCircleRec(circle.pos, circle.radius, computerRect);
-
 }
