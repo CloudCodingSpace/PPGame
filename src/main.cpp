@@ -1,4 +1,5 @@
 #include <raylib.h>
+#include <cstdlib>
 
 struct Circle {
   float radius;
@@ -72,12 +73,18 @@ int main(int argc, char** argv) {
 
       // Ball pos update
       if(isGameRunning) {
-        ball.pos.x -= ballVelocity;
+        ball.pos.x += ballVelocity;
+        ball.pos.y -= ballVelocity;
       }
       // Collision check with the bars
       if(CheckCollisionCircleRec(ball.pos, ball.radius, ConvertBarToRectangle(computerBar))) {
         ballVelocity *= -1;
       } else if(CheckCollisionCircleRec(ball.pos, ball.radius, ConvertBarToRectangle(playerBar))) {
+        ballVelocity *= -1;
+      } else if(ball.pos.x <= 0) {
+        ball.pos.x -= ballVelocity;
+        ballVelocity *= -1;
+      } else if(ball.pos.x >= WIDTH) {
         ballVelocity *= -1;
       }
 
